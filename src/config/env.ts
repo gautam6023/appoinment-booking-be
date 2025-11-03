@@ -5,7 +5,7 @@ const envSchema = z.object({
   JWT_SECRET: z.string().min(1, "JWT_SECRET is required"),
   RESEND_API_KEY: z.string().min(1, "RESEND_API_KEY is required"),
   PORT: z.string().optional(),
-  FRONTEND_URL: z.string().url().optional(),
+  FRONTEND_URL: z.string().url(),
   NODE_ENV: z.enum(["development", "production", "test"]).optional(),
   SERVER_TIMEZONE: z.string().optional(),
 });
@@ -28,4 +28,3 @@ function validateEnv(): Env {
 }
 
 export const env = validateEnv();
-
