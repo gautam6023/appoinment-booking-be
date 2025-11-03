@@ -46,12 +46,12 @@ export async function signup(req: Request, res: Response) {
       expiresIn: "7d",
     });
 
-    // Set cookie
+    const isProd = process.env.NODE_ENV === "production";
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      secure: isProd,
+      sameSite: "none",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     res.status(201).json(formatUserResponse(user));
@@ -85,12 +85,12 @@ export async function login(req: Request, res: Response) {
       expiresIn: "7d",
     });
 
-    // Set cookie
+    const isProd = process.env.NODE_ENV === "production";
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      secure: isProd,
+      sameSite: isProd ? "none" : "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     logInfo(`User logged in: ${toIdString(user._id)} - ${user.email}`);
@@ -106,7 +106,12 @@ export async function login(req: Request, res: Response) {
  * Logout - Clear authentication cookie
  */
 export async function logout(req: Request, res: Response) {
-  res.clearCookie("token");
+  const isProd = process.env.NODE_ENV === "production";
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: isProd,
+    sameSite: isProd ? "none" : "lax",
+  });
   res.json({ message: "Logged out successfully" });
 }
 

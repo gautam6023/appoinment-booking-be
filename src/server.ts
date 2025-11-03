@@ -21,10 +21,9 @@ const PORT = env.PORT ? parseInt(env.PORT, 10) : 3001;
 // CORS Configuration
 app.use(
   cors({
-    origin: env.FRONTEND_URL || "http://localhost:5173",
+    origin: env.FRONTEND_URL,
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
